@@ -91,4 +91,8 @@ describe ScoreCalculator do
     end
       
   end
+
+  it "returns the correct score" do
+    expect(score_calculator.calculate(@scorecard)).to eq 133
+  end
 end
