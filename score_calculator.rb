@@ -22,8 +22,11 @@ class ScoreCalculator
   end
 
   def valid_final_round(round)
-    (2..3).include?(round.length) \
-    && round.all? { |entry| valid_entry(entry) }
+    round.all? { |entry| valid_entry(entry) } \
+    && (
+      (round[...2].sum == 10 && round.length == 3) \
+    ||(round[...2].sum != 10 && round.length == 2)
+    )
 
   end
 
