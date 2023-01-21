@@ -27,7 +27,7 @@ describe ScoreCalculator do
   it "returns string unless input has 10 rounds" do
     @scorecard << [1, 7]
     expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your input has an invalid number of rounds"
-    expect(score_calculator.calculate(@scorecard[0...9])).to eq "Sorry, your input has an invalid number of rounds"
+    expect(score_calculator.calculate(@scorecard[...-2])).to eq "Sorry, your input has an invalid number of rounds"
   end
 
   context "When checking non-final rounds" do
