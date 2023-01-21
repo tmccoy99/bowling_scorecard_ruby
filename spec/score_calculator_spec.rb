@@ -44,19 +44,32 @@ describe ScoreCalculator do
       expect(score_calculator.calculate(@scorecard)).to eq "Sorry, one of your non-final round entries is invalid"
     end
 
-    it "returns string unless all entries are non-negative integers" do
+    it "returns string unless all round entries are non-negative integers" do
       @scorecard[6][1] = -1
       expect(score_calculator.calculate(@scorecard)).to eq "Sorry, one of your non-final round entries is invalid"
+      @scorecard[6][1] = "hello"
+      expect(score_calculator.calculate(@scorecard)).to eq "Sorry, one of your non-final round entries is invalid"
+
     end
   end
 
   context "When checking final round" do
 
-    it "returns string unless each round has two or three entries" do
+    it "returns string unless final round has two or three entries" do
       @scorecard[-1] << 5
       expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your final round entry is invalid"
       @scorecard[-1].pop(3)
       expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your final round entry is invalid"
     end
+
+    it "returns string unless all final round entries are integers between 1 and 10" do
+      @scorecard[-1][2] = -5
+      expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your final round entry is invalid"
+      @scorecard[-1][2] = "hello"
+      expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your final round entry is invalid"
+      @scorecard[-1][2] = 11
+      expect(score_calculator.calculate(@scorecard)).to eq "Sorry, your final round entry is invalid"
+    end
+
   end
 end
