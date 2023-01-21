@@ -1,3 +1,15 @@
+class Array
+  
+  def strike
+    self[0] == 10
+  end
+
+  def spare
+    self[0] != 10 && self[...2].sum == 10
+  end
+
+end
+
 class ScoreCalculator
 
   def calculate(scorecard)
@@ -39,4 +51,28 @@ class ScoreCalculator
     end
   end
 
+  def nonfinal_round_score(scorecard, round_index)
+    current_round, next_round = scorecard[round_index..(round_index + 1)]
+    score = current_round.sum
+    return score unless current_round.strike || current_round.spare
+    score += next_round[0]
+    return score unless current_round.strike
+    score += next_round.strike ? scorecard[round_index + 2][0] : next_round[1]
+    score
+  end
 end
+
+# scorecard = [
+#   [1, 4],
+#   [4, 5],
+#   [6, 4],
+#   [5, 5],
+#   [10, 0],
+#   [10, 0],
+#   [7, 3],
+#   [6, 4],
+#   [10, 0],
+#   [2, 8, 6], 
+# ]
+
+# ScoreCalculator.new.calculate(scorecard)
