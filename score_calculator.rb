@@ -1,15 +1,8 @@
 class ScoreCalculator
 
-  def calculate(scores)
-    unless scores.length == 10
-      return "Sorry, your input has an invalid number of rounds"
-    end
-    unless scores[...-1].all? { |round| valid_nonfinal_round(round) }
-      return "Sorry, one of your non-final round entries is invalid"
-    end
-    unless valid_final_round(scores[-1])
-      return "Sorry, your final round entry is invalid"
-    end
+  def calculate(scorecard)
+    error_message = check_validity(scorecard)
+    return error_message if error_message
     0
   end
 
@@ -32,6 +25,18 @@ class ScoreCalculator
 
   def valid_entry(entry)
     (0..10).include?(entry)
+  end
+
+  def check_validity(scorecard)
+    unless scorecard.length == 10
+      return "Sorry, your input has an invalid number of rounds"
+    end
+    unless scorecard[...-1].all? { |round| valid_nonfinal_round(round) }
+      return "Sorry, one of your non-final round entries is invalid"
+    end
+    unless valid_final_round(scorecard[-1])
+      return "Sorry, your final round entry is invalid"
+    end
   end
 
 end
