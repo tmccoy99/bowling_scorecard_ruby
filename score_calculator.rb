@@ -15,7 +15,10 @@ class ScoreCalculator
   def calculate(scorecard)
     error_message = check_validity(scorecard)
     return error_message if error_message
-    0
+    score = scorecard[...-1].each.with_index.inject(0) do |sum, (round, index)|
+      sum + nonfinal_round_score(scorecard, index)
+    end
+    score + scorecard[-1].sum
   end
 
   private
@@ -29,8 +32,8 @@ class ScoreCalculator
   def valid_final_round(round)
     round.all? { |entry| valid_entry(entry) } \
     && (
-      (round[...2].sum == 10 && round.length == 3) \
-    ||(round[...2].sum != 10 && round.length == 2)
+      (round[...2].sum >= 10 && round.length == 3) \
+    ||(round[...2].sum < 10 && round.length == 2)
     )
 
   end
@@ -57,22 +60,8 @@ class ScoreCalculator
     return score unless current_round.strike || current_round.spare
     score += next_round[0]
     return score unless current_round.strike
-    score += next_round.strike ? scorecard[round_index + 2][0] : next_round[1]
+    score += next_round.strike && round_index + 1 != 9 ? \
+      scorecard[round_index + 2][0] : next_round[1]
     score
   end
 end
-
-# scorecard = [
-#   [1, 4],
-#   [4, 5],
-#   [6, 4],
-#   [5, 5],
-#   [10, 0],
-#   [10, 0],
-#   [7, 3],
-#   [6, 4],
-#   [10, 0],
-#   [2, 8, 6], 
-# ]
-
-# ScoreCalculator.new.calculate(scorecard)

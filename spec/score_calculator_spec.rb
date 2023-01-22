@@ -94,5 +94,9 @@ describe ScoreCalculator do
 
   it "returns the correct score" do
     expect(score_calculator.calculate(@scorecard)).to eq 133
+    @scorecard = Array.new(9) { [10, 0] } << [10, 10, 10]
+    expect(score_calculator.calculate(@scorecard)).to eq 300
+    @scorecard = Array.new(10) { [2, 7] }
+    expect(score_calculator.calculate(@scorecard)).to eq 90
   end
 end
