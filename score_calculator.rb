@@ -15,9 +15,7 @@ class ScoreCalculator
   def calculate(scorecard)
     error_message = check_validity(scorecard)
     return error_message if error_message
-    score = scorecard[...-1].each.with_index.inject(0) do |sum, (round, index)|
-      sum + nonfinal_round_score(scorecard, index)
-    end
+    score = 0.upto(8).inject(0) { |sum, idx| sum + nonfinal_round_score(scorecard, idx) }
     score + scorecard[-1].sum
   end
 
