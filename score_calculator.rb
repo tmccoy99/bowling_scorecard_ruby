@@ -5,7 +5,7 @@ class Array
   end
 
   def spare
-    self[0] != 10 && self[...2].sum == 10
+    !self.strike && self[...2].sum == 10
   end
 
 end
@@ -55,13 +55,23 @@ class ScoreCalculator
   end
 
   def nonfinal_round_score(scorecard, round_index)
-    current_round, next_round = scorecard[round_index..(round_index + 1)]
+    current_round = scorecard[round_index]
     score = current_round.sum
-    return score unless current_round.strike || current_round.spare
-    score += next_round[0]
-    return score unless current_round.strike
-    score += next_round.strike && round_index + 1 != 9 ? \
-      scorecard[round_index + 2][0] : next_round[1]
+    score += spare_bonus(scorecard, round_index) if current_round.spare
+    score += strike_bonus(scorecard, round_index) if current_round.strike
     score
   end
+
+  def spare_bonus(scorecard, round_index)
+    next_round = scorecard[round_index + 1]
+    next_round[0]
+  end
+
+  def strike_bonus(scorecard, round_index)
+    next_round = scorecard[round_index + 1]
+    second_ball_bonus = next_round.strike && round_index != 8 ? \
+      scorecard[round_index + 2][0] : next_round[1]
+    spare_bonus(scorecard, round_index) + second_ball_bonus
+  end
+
 end
